@@ -157,7 +157,7 @@ select * from customers;
 --select GETDATE() as[GETDATE()];
 
 --Creating table Employee
-create table Employees(emp_id int primary key,emp_name varchar(50),Creation_date datetime,Email text);
+/*create table Employees(emp_id int primary key,emp_name varchar(50),Creation_date datetime,Email text);
 --Inserting values to Employee table
 insert into Employees values(5570,'Diksha',GETDATE(),'diksha@prolifics'),(5571,'Riva',GETDATE(),'riva@prolifics'),(5572,'Ajay',GETDATE(),'ajay@prolifics'),(5573,'Jaya',GETDATE(),'jaya@prolifics');
 insert into Employees values(5574,'Kartik',GETDATE(),'kar@prolifics'),(5575,'Reema',GETDATE(),'ree@prolifics');
@@ -185,28 +185,188 @@ insert into SalaryDetails values(112,5570,1225,GETDATE(),32000.00,'August'),
 (116,5570,1125,GETDATE(),28000.00,'July'),
 (114,5572,1445,GETDATE(),23000.00,'August'),(119,5573,1025,GETDATE(),34000.00,'January'),
 (120,5574,1001,GETDATE(),34000.00,'Febuary'),(101,5575,1905,GETDATE(),24000.00,'April');
+*/
 
 
 
 
 
+--Pratice(21/8/23)
+
+--creating a database
+create database Diksha;
+
+--For backingup the data
+backup database diksha to disk='C:\Database\backup1.bak';
+
+--For restoring the data
+Restore database diksha from disk ='C:\Database\backup1.bak';
+
+--creating a table
+create table Fruits(F_id int primary key,f_name text,f_price float);
+
+--inserting values to the table
+insert into Fruits values(123,'Apple',34.00);
+
+--delete the data inside the table
+truncate table Fruits;
+
+--adding a column after creating the table
+alter table Fruits add f_sell int;
+
+select * from Fruits;
+
+--delete the column
+alter table Fruits drop column f_sell,f_price;
+
+--adding more than one column
+alter table Fruits add f_sell int,f_price float;
+
+--creating table with not null unique
+create table Person(p_id int primary key,p_name varchar(50),p_address text,p_age int not null unique);
+
+--Removing uniqueness
+alter table Person drop constraint UQ_Person_FCF23F7D35FC67CA;
+
+
+select GETDATE() as[GETDATE()];
+
+--Problem:Store salary of each employees monthly basis
+create table Employee1(emp_id int primary key,emp_name varchar(50),emp_address text,Creation_date datetime,Email text);
+
+create table Salary2(sal_id int primary key,emp_id int,foreign key (emp_id) references Employee1(emp_id),Creation_date datetime,bank_acc bigint);
+alter table Salary2 add month_credited varchar(50);
+
+insert into Employee1 values(5570,'Diksha','Hyderabad',GETDATE(),'diksha@prolifics'),(5571,'Riva','Vadodara',GETDATE(),'riva@prolifics'),(5572,'Ajay','Bengluru',GETDATE(),'ajay@prolifics'),(5573,'Jaya','Ahmedabad',GETDATE(),'jaya@prolifics');
+
+select * from Employee1;
+
+insert into Salary2 values(1256,5570,GETDATE(),4238457,'January'),(1666,5571,GETDATE(),4238457,'February'),(1006,5572,GETDATE(),77436325,'January'),(1278,5573,GETDATE(),435554,'November');
+
+select * from Salary2;
+
+
+--Task
+--Create one database which should keep 32 people information, salary information, daily attendance 
+
+create table Employee2(emp_id int primary key,emp_name varchar(50),date_of_join text,creation_date datetime,email text);
+
+create table Attendance(attendance_id int primary key,emp_id int,foreign key (emp_id) references Employee2(emp_id),creation_date datetime,status varchar(50));
+
+create table Salary(sal_id int primary key,emp_id int,foreign key (emp_id) references Employee2(emp_id),creation_date datetime,credited_month varchar(50),amount float);
+
+insert into Employee2 values (5501,'Riya','15-4-2023',GETDATE(),'riya@prolifics.com'),
+(5502,'Divya','15-4-2023',GETDATE(),'divya@prolifics.com'),(5503,'Diksha','15-6-2023',GETDATE(),'diksha@prolifics.com'),
+(5504,'Krishna','15-6-2023',GETDATE(),'krish@prolifics.com'),(5505,'Kartik','15-4-2023',GETDATE(),'kar@prolifics.com');
+
+select * from Employee2;
+
+insert into Attendance values (770,5501,GETDATE(),'Present'),(771,5502,GETDATE(),'Present'),
+(772,5503,GETDATE(),'Absent'),(773,5504,GETDATE(),'Present'),(774,5505,GETDATE(),'Leave');
+
+select * from Attendance
+
+insert into Salary values (123,5501,GETDATE(),'Jan',23000.00),(124,5502,GETDATE(),'Jan',23700.00),
+(125,5501,GETDATE(),'feb',25000.00),(126,5503,GETDATE(),'Jan',23000.00),(127,5504,GETDATE(),'Jan',20000.00),
+(128,5505,GETDATE(),'Jan',15000.00),(129,5502,GETDATE(),'feb',23000.00),(130,5503,GETDATE(),'march',25000.00),
+(131,5504,GETDATE(),'feb',23000.00),(132,5505,GETDATE(),'march',15000.00);
+
+select * from Salary;
 
 
 
+--multiple foreign keys
+
+create table Employee5(emp_id int ,emp_name varchar(50),email text,creation_date datetime,primary key(emp_id,emp_name));
+
+create table Salary5(sal_id int,emp_id int,emp_name varchar(50),
+foreign key(emp_id,emp_name) references Employee5(emp_id,emp_name),
+Amount float,creation_date datetime);
 
 
+insert into Employee5 values(5512,'Diksha','diksha@gmail.com',GETDATE()),
+(5513,'Riva','riva@gmail.com',GETDATE()),
+(5514,'Siya','siya@gmail.com',GETDATE());
+
+select * from Employee5;
+
+insert into Salary5 values(1001,5512,'Diksha',23000.00,GETDATE()),
+(1002,5513,'Riva',23034.00,GETDATE()),
+(1003,5514,'Siya',28000.00,GETDATE());
 
 
+alter table Salary5 drop constraint FK__Salary5__29E1370A;
+
+select * from Salary5;
 
 
+--Task
+--Age is not >60 &<18
+
+create table Employee6(emp_id int primary key,
+emp_name varchar(50) not null,Age int not null check(age>18 and age<60)
+,Email text);
+
+--Checking the salary
+Create table Employee7(Emp_id int primary key,Emp_name varchar(50) not null,salary int);
+
+alter table Employee7 add constraint law check (salary > 50000);
+
+--adding default salary
+alter table Employee7 add constraint notnull default(70000) for salary;
+
+insert into Employee7 values (5501,'Diksha',55000);
+
+insert into Employee7(emp_id,emp_name) values(5002,'Richa');
+
+select * from Employee7;
 
 
+--Default values
+Create table Employee8(emp_id int primary key,emp_name varchar(50),company_name varchar(100) );
+
+alter table Employee8 add constraint defaultname default('Prolifics') for company_name;
+
+insert into Employee8(emp_id,emp_name) values(5501,'Diksha'),(5502,'Reena');
+
+select * from Employee8;
 
 
+--Pratice
+
+create table Employee9(emp_id int primary key,emp_name varchar(50),email text,creation_date datetime,Age int);
+
+--Checking the age value
+alter table Employee9 add constraint agecheck check(age>18 and age<60); 
+
+--adding default employee name
+alter table Employee9 add constraint defaultvalue default('Prolifics') for emp_name;
 
 
+create table Salary6(sal_id int,emp_id int,
+foreign key(emp_id) references Employee9(emp_id),
+Amount float,creation_date datetime);
 
+--Checking salary amount
+alter table Salary6 add constraint checksal check(Amount>10000) ;
 
+--Checking the age condition
+insert into Employee9 values (5501,'Diksha','diksha@prolifics.com',GETDATE(),10);
 
+insert into Employee9 values (5501,'Diksha','diksha@prolifics.com',GETDATE(),23),
+(5502,'Reena','ree@prolifics.com',GETDATE(),30);
+
+--Checking the default constraint
+insert into Employee9(emp_id,email,age) values(5503,'dee@prolifics.com',26);
+
+select * from Employee9;
+
+--Checking the salary condition
+insert into Salary6 values(112,5501,3000,GETDATE());
+
+insert into Salary6 values(112,5501,30000,GETDATE()),
+(113,5502,28000,GETDATE());
+
+select * from Salary6;
 
 
